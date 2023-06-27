@@ -22,7 +22,7 @@
 -   Cài đặt thư viện
 
 ```sh
-  pip install keras tensorflow xgboost alpha_vantage dash pandas matplotlib
+  pip install keras tensorflow xgboost alpha_vantage dash pandas matplotlib scikit-learn
 ```
 
 -   Cài các Extensions (VSCode tự động yêu cầu khi mở project)
@@ -36,7 +36,7 @@
 #### 🐍 Anaconda
 
 ```sh
-  conda install -c conda-force keras tensorflow xgboost alpha_vantage dash pandas matplotlib
+  conda install -c conda-forge keras tensorflow xgboost alpha_vantage dash pandas matplotlib scikit-learn
 ```
 
 ### Chạy StockApplication
