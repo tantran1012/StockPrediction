@@ -497,6 +497,75 @@ def training(n_clicks, companyName, modelName, indicatorArr, period):
     model = xgb.fit(X_train, y_train)
     pickle.dump(model, open("../MODEL/XGBOOST_ROC.dat", "wb"))
 
+    ## XGBOOST_SMA
+    dataset = original_df[['close', 'volume', 'SMA']]
+    for i in range (1, 3):
+        dataset["close_date_" + str(i)] = dataset.close.shift(i)
+        dataset["volume_date_" + str(i)] = dataset.volume.shift(i)
+        dataset["SMA_date_" + str(i)] = dataset.SMA.shift(i)
+    dataset.dropna(inplace=True)
+    X = dataset.drop(['close', 'volume', 'SMA'], axis=1)
+    y = pd.DataFrame(dataset['close'])
+    X_train, y_train = X[:math.ceil(len(X)*0.9)], y[:math.ceil(len(X)*0.9)]
+    xgb = xgboost.XGBRegressor(n_estimators=100, 
+                            max_depth=8, 
+                            learning_rate=0.1,
+                            min_child_weight=5,
+                            subsample=0.1, 
+                            colsample_bytree=1, 
+                            colsample_bylevel=1,
+                            gamma=0.3,
+                            objective='reg:squarederror')
+    model = xgb.fit(X_train, y_train)
+    pickle.dump(model, open("./MODEL/XGBOOST_SMA.dat", "wb"))
+
+    ## XGBOOST_RSI
+    dataset = original_df[['close', 'volume', 'RSI']]
+
+    for i in range (1, 3):
+        dataset["close_date_" + str(i)] = dataset.close.shift(i)
+        dataset["volume_date_" + str(i)] = dataset.volume.shift(i)
+        dataset["RSI_date_" + str(i)] = dataset.RSI.shift(i)
+    dataset.dropna(inplace=True)
+    X = dataset.drop(['close', 'volume', 'RSI'], axis=1)
+    y = pd.DataFrame(dataset['close'])
+    X_train, y_train = X[:math.ceil(len(X)*0.9)], y[:math.ceil(len(X)*0.9)]
+    xgb = xgboost.XGBRegressor(n_estimators=100, 
+                            max_depth=8, 
+                            learning_rate=0.1,
+                            min_child_weight=5,
+                            subsample=0.1, 
+                            colsample_bytree=1, 
+                            colsample_bylevel=1,
+                            gamma=0.3,
+                            objective='reg:squarederror')
+    model = xgb.fit(X_train, y_train)
+    pickle.dump(model, open("./MODEL/XGBOOST_RSI.dat", "wb"))
+
+    ## XGBOOST_BBANDS
+    dataset = original_df[['close', 'volume', 'Real Lower Band', 'Real Middle Band', 'Real Upper Band']]
+    for i in range (1, 3):
+        dataset["close_date_" + str(i)] = dataset.close.shift(i)
+        dataset["volume_date_" + str(i)] = dataset.volume.shift(i)
+        dataset["RLB_date_" + str(i)] = dataset['Real Lower Band'].shift(i)
+        dataset["RMB_date_" + str(i)] = dataset['Real Middle Band'].shift(i)
+        dataset["RUB_date_" + str(i)] = dataset['Real Upper Band'].shift(i)
+    dataset.dropna(inplace=True)
+    X = dataset.drop(['close', 'volume', 'Real Lower Band', 'Real Middle Band', 'Real Upper Band'], axis=1)
+    y = pd.DataFrame(dataset['close'])
+    X_train, y_train = X[:math.ceil(len(X)*0.9)], y[:math.ceil(len(X)*0.9)]
+    xgb = xgboost.XGBRegressor(n_estimators=100, 
+                            max_depth=8, 
+                            learning_rate=0.1,
+                            min_child_weight=5,
+                            subsample=0.1, 
+                            colsample_bytree=1, 
+                            colsample_bylevel=1,
+                            gamma=0.3,
+                            objective='reg:squarederror')
+    model = xgb.fit(X_train, y_train)
+    pickle.dump(model, open("./MODEL/XGBOOST_BBANDS.dat", "wb"))
+
     return f'training successfully for {company[companyName]} using XGBOOST'
 
 
